@@ -1,0 +1,34 @@
+INFO:comtypes.client._code_cache:Imported existing <module 'comtypes.gen' from 'C:\\Users\\Aura\\AppData\\Roaming\\Python\\Python312\\site-packages\\comtypes\\gen\\__init__.py'>
+INFO:comtypes.client._code_cache:Using writeable comtypes cache directory: 'C:\Users\Aura\AppData\Roaming\Python\Python312\site-packages\comtypes\gen'
+INFO:root:Monitor started
+INFO:root:Initial Net=True
+ERROR:pystray._base:An error occurred when calling message handler
+Traceback (most recent call last):
+  File "C:\Users\Aura\AppData\Roaming\Python\Python312\site-packages\pystray\_win32.py", line 412, in _dispatcher
+    return int(icon._message_handlers.get(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aura\AppData\Roaming\Python\Python312\site-packages\pystray\_win32.py", line 224, in _on_notify
+    descriptors[index - 1](self)
+  File "C:\Users\Aura\AppData\Roaming\Python\Python312\site-packages\pystray\_base.py", line 328, in inner
+    callback(self)
+  File "C:\Users\Aura\AppData\Roaming\Python\Python312\site-packages\pystray\_base.py", line 453, in __call__
+    return self._action(icon, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aura\Monitor\monitor.py", line 102, in open_alert_log
+    os.startfile(ALERT_LOG)
+FileNotFoundError: [WinError 2] The system cannot find the file specified: 'C:\\Users\\Aura\\Monitor\\alerts.log'
+ERROR:pystray._base:An error occurred when calling message handler
+Traceback (most recent call last):
+  File "C:\Users\Aura\AppData\Roaming\Python\Python312\site-packages\pystray\_win32.py", line 412, in _dispatcher
+    return int(icon._message_handlers.get(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aura\AppData\Roaming\Python\Python312\site-packages\pystray\_win32.py", line 224, in _on_notify
+    descriptors[index - 1](self)
+  File "C:\Users\Aura\AppData\Roaming\Python\Python312\site-packages\pystray\_base.py", line 328, in inner
+    callback(self)
+  File "C:\Users\Aura\AppData\Roaming\Python\Python312\site-packages\pystray\_base.py", line 453, in __call__
+    return self._action(icon, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aura\Monitor\monitor.py", line 102, in open_alert_log
+    os.startfile(ALERT_LOG)
+FileNotFoundError: [WinError 2] The system cannot find the file specified: 'C:\\Users\\Aura\\Monitor\\alerts.log'

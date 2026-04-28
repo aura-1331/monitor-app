@@ -1,0 +1,7 @@
+{
+    "alerts_enabled": true,
+    "critical_battery": 5,
+    "telegram_enabled": false,
+    "bot_token": "",
+    "chat_id": ""
+}

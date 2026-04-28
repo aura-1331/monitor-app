@@ -1,0 +1,20 @@
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+venv/
+env/
+.venv/
+
+# Build Tools (PyInstaller & Nuitka)
+build/
+dist/
+*.spec
+*.build/
+*.onefile-build/
+*.dist/
+*.exe

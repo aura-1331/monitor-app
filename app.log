@@ -1,0 +1,163 @@
+2026-04-25 16:58:08,701 [DEBUG] CoInitializeEx(None, 2)
+2026-04-25 16:58:08,736 [INFO] Imported existing <module 'comtypes.gen' from 'C:\\Users\\Aura\\AppData\\Roaming\\Python\\Python312\\site-packages\\comtypes\\gen\\__init__.py'>
+2026-04-25 16:58:08,736 [INFO] Using writeable comtypes cache directory: 'C:\Users\Aura\AppData\Roaming\Python\Python312\site-packages\comtypes\gen'
+2026-04-25 16:58:08,798 [DEBUG] SAPI.SPVoice -> {96749377-3391-11D2-9EE3-00C04F797396}
+2026-04-25 16:58:08,798 [DEBUG] CoCreateInstance({96749377-3391-11D2-9EE3-00C04F797396}, clsctx=None, interface=None)
+2026-04-25 16:58:08,805 [DEBUG] GetBestInterface(<POINTER(IUnknown) ptr=0x1f53a8f6280 at 1f53e0b7ed0>)
+2026-04-25 16:58:08,806 [DEBUG] Does implement IProvideClassInfo
+2026-04-25 16:58:08,807 [DEBUG] Default interface is {269316D8-57BD-11D2-9EEE-00C04F797396}
+2026-04-25 16:58:08,808 [DEBUG] Release <POINTER(IUnknown) ptr=0x1f53a8f62c0 at 1f53e120450>
+2026-04-25 16:58:08,808 [DEBUG] GetModule(TLIBATTR(GUID={C866CA3A-32F7-11D2-9602-00C04F8EE628}, Version=5.4, LCID=0, FLags=0x8))
+2026-04-25 16:58:08,808 [DEBUG] Implements default interface from typeinfo <class 'comtypes.gen._C866CA3A_32F7_11D2_9602_00C04F8EE628_0_5_4.ISpeechVoice'>
+2026-04-25 16:58:08,808 [DEBUG] Final result is <POINTER(ISpeechVoice) ptr=0x1f53a8f62c0 at 1f53e1203d0>
+2026-04-25 16:58:08,808 [DEBUG] Release <POINTER(IProvideClassInfo) ptr=0x1f53a8f62e0 at 1f53e0b7f50>
+2026-04-25 16:58:08,808 [DEBUG] Release <POINTER(ITypeInfo) ptr=0x1f53d588068 at 1f53e0b7550>
+2026-04-25 16:58:08,808 [DEBUG] Release <POINTER(ITypeInfo) ptr=0x1f53d5880c0 at 1f53e120050>
+2026-04-25 16:58:08,808 [DEBUG] Release <POINTER(ITypeLib) ptr=0x1f53cdfbd00 at 1f53e120450>
+2026-04-25 16:58:08,808 [DEBUG] Release <POINTER(IUnknown) ptr=0x1f53a8f6280 at 1f53e0b7ed0>
+2026-04-25 16:58:08,808 [DEBUG] <POINTER(ISpeechVoice) ptr=0x1f53a8f62c0 at 1f53e1203d0> using sinkinterface from clsid <class 'comtypes.gen._C866CA3A_32F7_11D2_9602_00C04F8EE628_0_5_4._ISpeechVoiceEvents'>
+2026-04-25 16:58:08,809 [DEBUG] Release <POINTER(IProvideClassInfo2) ptr=0x1f53a8f62e0 at 1f53e0b7ed0>
+2026-04-25 16:58:08,809 [DEBUG] <comtypes.client._events.CreateEventReceiver.<locals>.Sink object at 0x000001F53DE34D70>: _ISpeechVoiceEvents.VoiceChange not implemented
+2026-04-25 16:58:08,809 [DEBUG] <comtypes.client._events.CreateEventReceiver.<locals>.Sink object at 0x000001F53DE34D70>: _ISpeechVoiceEvents.Bookmark not implemented
+2026-04-25 16:58:08,809 [DEBUG] <comtypes.client._events.CreateEventReceiver.<locals>.Sink object at 0x000001F53DE34D70>: _ISpeechVoiceEvents.Sentence not implemented
+2026-04-25 16:58:08,809 [DEBUG] <comtypes.client._events.CreateEventReceiver.<locals>.Sink object at 0x000001F53DE34D70>: _ISpeechVoiceEvents.Phoneme not implemented
+2026-04-25 16:58:08,809 [DEBUG] <comtypes.client._events.CreateEventReceiver.<locals>.Sink object at 0x000001F53DE34D70>: _ISpeechVoiceEvents.Viseme not implemented
+2026-04-25 16:58:08,809 [DEBUG] <comtypes.client._events.CreateEventReceiver.<locals>.Sink object at 0x000001F53DE34D70>: _ISpeechVoiceEvents.AudioLevel not implemented
+2026-04-25 16:58:08,809 [DEBUG] <comtypes.client._events.CreateEventReceiver.<locals>.Sink object at 0x000001F53DE34D70>: _ISpeechVoiceEvents.EnginePrivate not implemented
+2026-04-25 16:58:08,809 [DEBUG] Start advise <class 'comtypes.gen._C866CA3A_32F7_11D2_9602_00C04F8EE628_0_5_4._ISpeechVoiceEvents'>
+2026-04-25 16:58:08,809 [DEBUG] <comtypes.client._events.CreateEventReceiver.<locals>.Sink object at 0x000001F53DE34D70>.QueryInterface({A372ACD1-3BEF-4BBD-8FFB-CB3E2B416AF8}) -> S_OK
+2026-04-25 16:58:08,809 [DEBUG] 1 active COM objects: Added   <comtypes.client._events.CreateEventReceiver.<locals>.Sink object at 0x000001F53DE34D70>
+2026-04-25 16:58:08,809 [DEBUG] <comtypes.client._events.CreateEventReceiver.<locals>.Sink object at 0x000001F53DE34D70>.AddRef() -> 1
+2026-04-25 16:58:08,816 [DEBUG] Release <POINTER(IConnectionPointContainer) ptr=0x1f53a8f62e8 at 1f53ddd3050>
+2026-04-25 16:58:08,832 [DEBUG] wrap_outparam(<POINTER(ISpeechObjectToken) ptr=0x1f53a8f7320 at 1f53ddd3050>)
+2026-04-25 16:58:08,833 [DEBUG] Release <POINTER(ISpeechObjectToken) ptr=0x1f53a8f7320 at 1f53ddd3050>
+2026-04-25 16:58:08,833 [DEBUG] wrap_outparam(<POINTER(ISpeechObjectTokens) ptr=0x1f53ef950c0 at 1f53ddd3050>)
+2026-04-25 16:58:08,833 [DEBUG] Release <POINTER(IUnknown) ptr=0x1f53efc90c0 at 1f53ddd3450>
+2026-04-25 16:58:08,833 [DEBUG] wrap_outparam(<POINTER(IDispatch) ptr=0x1f53ef96a30 at 1f53ddd37d0>)
+2026-04-25 16:58:08,833 [DEBUG] GetBestInterface(<POINTER(IDispatch) ptr=0x1f53ef96a30 at 1f53ddd37d0>)
+2026-04-25 16:58:08,833 [DEBUG] Does NOT implement IProvideClassInfo, trying IProvideClassInfo2
+2026-04-25 16:58:08,833 [DEBUG] Does NOT implement IProvideClassInfo/IProvideClassInfo2
+2026-04-25 16:58:08,834 [DEBUG] Release <POINTER(IUnknown) ptr=0x1f53d588170 at 1f53e1216d0>
+2026-04-25 16:58:08,834 [DEBUG] Default interface is {C74A3ADC-B727-4500-A84A-B526721C8B8C}
+2026-04-25 16:58:08,834 [DEBUG] Release <POINTER(IUnknown) ptr=0x1f53ef96a30 at 1f53e121850>
+2026-04-25 16:58:08,834 [DEBUG] GetModule(TLIBATTR(GUID={C866CA3A-32F7-11D2-9602-00C04F8EE628}, Version=5.4, LCID=0, FLags=0x8))
+2026-04-25 16:58:08,834 [DEBUG] Implements default interface from typeinfo <class 'comtypes.gen._C866CA3A_32F7_11D2_9602_00C04F8EE628_0_5_4.ISpeechObjectToken'>
+2026-04-25 16:58:08,834 [DEBUG] Final result is <POINTER(ISpeechObjectToken) ptr=0x1f53ef96a30 at 1f53e121750>
+2026-04-25 16:58:08,834 [DEBUG] Release <POINTER(IDispatch) ptr=0x1f53ef96a30 at 1f53ddd32d0>
+2026-04-25 16:58:08,834 [DEBUG] Release <POINTER(ITypeInfo) ptr=0x1f53d588170 at 1f53e121650>
+2026-04-25 16:58:08,834 [DEBUG] Release <POINTER(ITypeLib) ptr=0x1f53cdfbd00 at 1f53e121850>
+2026-04-25 16:58:08,834 [DEBUG] Release <POINTER(IDispatch) ptr=0x1f53ef96a30 at 1f53ddd37d0>
+2026-04-25 16:58:08,834 [DEBUG] Release <POINTER(IEnumVARIANT) ptr=0x1f53efc90c0 at 1f53ddd3950>
+2026-04-25 16:58:08,835 [DEBUG] Release <POINTER(ISpeechObjectTokens) ptr=0x1f53ef950c0 at 1f53ddd3050>
+2026-04-25 16:58:08,835 [DEBUG] Release <POINTER(ISpeechObjectToken) ptr=0x1f53ef96a30 at 1f53e121750>
+2026-04-25 16:58:08,835 [INFO] Monitor started
+2026-04-25 16:58:08,839 [DEBUG] Starting new HTTPS connection (1): www.google.com:443
+2026-04-25 16:58:08,860 [DEBUG] Importing AvifImagePlugin
+2026-04-25 16:58:08,865 [DEBUG] Importing BlpImagePlugin
+2026-04-25 16:58:08,866 [DEBUG] Importing BmpImagePlugin
+2026-04-25 16:58:08,867 [DEBUG] Importing BufrStubImagePlugin
+2026-04-25 16:58:08,867 [DEBUG] Importing CurImagePlugin
+2026-04-25 16:58:08,868 [DEBUG] Importing DcxImagePlugin
+2026-04-25 16:58:08,869 [DEBUG] Importing DdsImagePlugin
+2026-04-25 16:58:08,872 [DEBUG] Importing EpsImagePlugin
+2026-04-25 16:58:08,873 [DEBUG] Importing FitsImagePlugin
+2026-04-25 16:58:08,875 [DEBUG] Importing FliImagePlugin
+2026-04-25 16:58:08,875 [DEBUG] Importing FpxImagePlugin
+2026-04-25 16:58:08,876 [DEBUG] Image: failed to import FpxImagePlugin: No module named 'olefile'
+2026-04-25 16:58:08,876 [DEBUG] Importing FtexImagePlugin
+2026-04-25 16:58:08,876 [DEBUG] Importing GbrImagePlugin
+2026-04-25 16:58:08,877 [DEBUG] Importing GifImagePlugin
+2026-04-25 16:58:08,877 [DEBUG] Importing GribStubImagePlugin
+2026-04-25 16:58:08,877 [DEBUG] Importing Hdf5StubImagePlugin
+2026-04-25 16:58:08,878 [DEBUG] Importing IcnsImagePlugin
+2026-04-25 16:58:08,879 [DEBUG] Importing IcoImagePlugin
+2026-04-25 16:58:08,880 [DEBUG] Importing ImImagePlugin
+2026-04-25 16:58:08,880 [DEBUG] Importing ImtImagePlugin
+2026-04-25 16:58:08,881 [DEBUG] Importing IptcImagePlugin
+2026-04-25 16:58:08,881 [DEBUG] Importing JpegImagePlugin
+2026-04-25 16:58:08,881 [DEBUG] Importing Jpeg2KImagePlugin
+2026-04-25 16:58:08,881 [DEBUG] Importing McIdasImagePlugin
+2026-04-25 16:58:08,882 [DEBUG] Importing MicImagePlugin
+2026-04-25 16:58:08,882 [DEBUG] Image: failed to import MicImagePlugin: No module named 'olefile'
+2026-04-25 16:58:08,883 [DEBUG] Importing MpegImagePlugin
+2026-04-25 16:58:08,883 [DEBUG] Importing MpoImagePlugin
+2026-04-25 16:58:08,885 [DEBUG] Importing MspImagePlugin
+2026-04-25 16:58:08,885 [DEBUG] Importing PalmImagePlugin
+2026-04-25 16:58:08,887 [DEBUG] Importing PcdImagePlugin
+2026-04-25 16:58:08,887 [DEBUG] Importing PcxImagePlugin
+2026-04-25 16:58:08,887 [DEBUG] Importing PdfImagePlugin
+2026-04-25 16:58:08,892 [DEBUG] Importing PixarImagePlugin
+2026-04-25 16:58:08,892 [DEBUG] Importing PngImagePlugin
+2026-04-25 16:58:08,892 [DEBUG] Importing PpmImagePlugin
+2026-04-25 16:58:08,892 [DEBUG] Importing PsdImagePlugin
+2026-04-25 16:58:08,893 [DEBUG] Importing QoiImagePlugin
+2026-04-25 16:58:08,893 [DEBUG] Importing SgiImagePlugin
+2026-04-25 16:58:08,894 [DEBUG] Importing SpiderImagePlugin
+2026-04-25 16:58:08,894 [DEBUG] Importing SunImagePlugin
+2026-04-25 16:58:08,895 [DEBUG] Importing TgaImagePlugin
+2026-04-25 16:58:08,895 [DEBUG] Importing TiffImagePlugin
+2026-04-25 16:58:08,895 [DEBUG] Importing WebPImagePlugin
+2026-04-25 16:58:08,900 [DEBUG] Importing WmfImagePlugin
+2026-04-25 16:58:08,900 [DEBUG] Importing XbmImagePlugin
+2026-04-25 16:58:08,902 [DEBUG] Importing XpmImagePlugin
+2026-04-25 16:58:08,902 [DEBUG] Importing XVThumbImagePlugin
+2026-04-25 16:58:10,658 [DEBUG] https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-04-25 16:58:10,745 [DEBUG] Starting new HTTPS connection (1): www.google.com:443
+2026-04-25 16:58:11,876 [DEBUG] https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-04-25 16:58:11,977 [INFO] Power=1, Net=True, Battery=100
+2026-04-25 16:58:16,979 [DEBUG] Starting new HTTPS connection (1): www.google.com:443
+2026-04-25 16:58:17,834 [DEBUG] https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-04-25 16:58:17,917 [INFO] Power=1, Net=True, Battery=100
+2026-04-25 16:58:22,919 [DEBUG] Starting new HTTPS connection (1): www.google.com:443
+2026-04-25 16:58:22,920 [INFO] Power=1, Net=False, Battery=100
+2026-04-25 16:58:26,003 [DEBUG] wrap_outparam(<POINTER(ISpeechObjectToken) ptr=0x1f53a8f7320 at 1f53fdc26d0>)
+2026-04-25 16:58:26,004 [DEBUG] Release <POINTER(ISpeechObjectToken) ptr=0x1f53a8f7320 at 1f53fdc26d0>
+2026-04-25 17:03:13,044 [INFO] App exiting
+2026-04-25 17:04:19,456 [INFO] Imported existing <module 'comtypes.gen' from 'C:\\Users\\Aura\\AppData\\Roaming\\Python\\Python312\\site-packages\\comtypes\\gen\\__init__.py'>
+2026-04-25 17:04:19,457 [INFO] Using writeable comtypes cache directory: 'C:\Users\Aura\AppData\Roaming\Python\Python312\site-packages\comtypes\gen'
+2026-04-25 17:04:19,561 [INFO] Monitor started
+2026-04-25 17:04:19,810 [INFO] Net=True
+2026-04-25 17:04:24,928 [INFO] Net=True
+2026-04-25 17:04:30,073 [INFO] Net=True
+2026-04-25 17:04:35,193 [INFO] Net=True
+2026-04-25 17:04:40,287 [INFO] Net=True
+2026-04-25 17:04:45,410 [INFO] Net=True
+2026-04-25 17:04:50,541 [INFO] Net=True
+2026-04-25 17:04:55,665 [INFO] Net=True
+2026-04-25 17:05:00,808 [INFO] Net=True
+2026-04-25 17:05:05,942 [INFO] Net=True
+2026-04-25 17:05:11,078 [INFO] Net=True
+2026-04-25 17:05:16,233 [INFO] Net=True
+2026-04-25 17:05:21,365 [INFO] Net=True
+2026-04-25 17:05:26,472 [INFO] Net=True
+2026-04-25 17:05:31,623 [INFO] Net=True
+2026-04-25 17:05:36,744 [INFO] Net=True
+2026-04-25 17:05:41,848 [INFO] Net=True
+2026-04-25 17:05:47,058 [INFO] Net=True
+2026-04-25 17:05:52,177 [INFO] Net=True
+2026-04-25 17:05:57,298 [INFO] Net=True
+2026-04-25 17:06:02,446 [INFO] Net=True
+2026-04-25 17:06:07,534 [INFO] Net=True
+2026-04-25 17:06:12,674 [INFO] Net=True
+2026-04-25 17:06:17,775 [INFO] Net=True
+2026-04-25 17:06:22,899 [INFO] Net=True
+2026-04-25 17:06:28,034 [INFO] Net=True
+2026-04-25 17:06:33,155 [INFO] Net=True
+2026-04-25 17:06:38,260 [INFO] Net=True
+2026-04-25 17:06:43,379 [INFO] Net=True
+2026-04-25 17:06:48,499 [INFO] Net=True
+2026-04-25 17:06:53,620 [INFO] Net=True
+2026-04-25 17:06:58,756 [INFO] Net=True
+2026-04-25 17:07:03,906 [INFO] Net=True
+2026-04-25 17:07:09,046 [INFO] Net=True
+2026-04-25 17:07:14,229 [INFO] Net=True
+2026-04-25 17:07:19,341 [INFO] Net=True
+2026-04-25 17:07:24,457 [INFO] Net=True
+2026-04-25 17:07:29,577 [INFO] Net=True
+2026-04-25 17:07:34,696 [INFO] Net=True
+2026-04-25 17:07:39,876 [INFO] Net=True
+2026-04-25 17:07:45,744 [INFO] Net=True
+2026-04-25 17:07:50,886 [INFO] Net=True
+2026-04-25 17:07:55,990 [INFO] Net=True
+2026-04-25 17:08:01,105 [INFO] Net=True
+2026-04-25 17:08:04,642 [INFO] App exiting
