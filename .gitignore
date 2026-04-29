@@ -1,20 +1,8 @@
+*.log
+settings.json
 .env
-
-# Python
+piper/
 __pycache__/
-*.py[cod]
-*$py.class
-
-# Environments
-venv/
-env/
-.venv/
-
-# Build Tools (PyInstaller & Nuitka)
-build/
 dist/
+build/
 *.spec
-*.build/
-*.onefile-build/
-*.dist/
-*.exe
