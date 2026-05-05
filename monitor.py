@@ -45,14 +45,18 @@ def get_resource_path(relative_path):
 # Fetches directly from the encrypted Windows Credential Manager
 TELEGRAM_TOKEN = keyring.get_password("AuraMonitor", "TELEGRAM_TOKEN")
 CHAT_ID = keyring.get_password("AuraMonitor", "CHAT_ID")
-APP_VERSION = "1.4.0"
+APP_VERSION = "1..0"
 
 active_overlay = None
 
 def check_for_updates(current_version):
     api_url = "https://api.github.com/repos/aura-1331/monitor-app/releases/latest"
     try:
-        response = requests.get(api_url, timeout=5)
+        response = requests.get(
+         api_url,
+        headers={"User-Agent": "AuraMonitor"},
+        timeout=5
+        )
         if response.status_code == 200:
             data = response.json()
             latest_tag = data["tag_name"]
