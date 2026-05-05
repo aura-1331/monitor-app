@@ -4,8 +4,7 @@ from PyQt6.QtCore import Qt, QTimer, QThread, pyqtSignal
 from telegram import Bot
 import edge_tts
 from pystray import Icon, MenuItem, Menu
-from PIL import Image, ImageDraw
-from dotenv import load_dotenv
+from PIL import Image
 from packaging import version 
 import pywifi
 from pywifi import const
@@ -105,36 +104,68 @@ class VoiceManager:
             pass
 
     async def speak(self, text, is_online, muted):
-        if muted: 
+        if muted:
             logging.info(f"Voice Muted: {text}")
             return
+
         logging.info(f"Speaking: {text}")
-        self.stop_audio()
+
+        # Only interrupt for critical alerts
+        is_critical = (
+            "CRITICAL BATTERY" in text
+            or "not charging" in text.lower()
+            or "POWER LOST" in text
+        )
+
+        if is_critical:
+            self.stop_audio()
+
+        # wait if normal audio already playing
+        if not is_critical:
+            while pygame.mixer.get_init() and pygame.mixer.music.get_busy():
+                await asyncio.sleep(0.5)
+
         self.cleanup_temp_files()
         await asyncio.sleep(0.2)
+
         ts = int(time.time())
         use_online = is_online
         filename = os.path.join(self.base_dir, f"v_{ts}")
+
         try:
             if use_online:
                 logging.info("Requesting Edge-TTS (Ana)...")
                 try:
                     comm = edge_tts.Communicate(text, "en-US-AnaNeural")
-                    await asyncio.wait_for(comm.save(filename + ".mp3"), timeout=7.0)
+                    await asyncio.wait_for(
+                        comm.save(filename + ".mp3"),
+                        timeout=3.0
+                    )
                     final_file = filename + ".mp3"
-                except Exception as e: 
+
+                except Exception as e:
                     logging.warning(f"Edge-TTS fallback: {e}")
                     use_online = False
+
             if not use_online:
                 logging.info("Using Piper Offline TTS...")
                 final_file = filename + ".wav"
-                cmd = f'echo {text} | "{self.piper_exe}" --model "{self.model}" --output_file "{final_file}"'
+
+                cmd = (
+                    f'echo {text} | '
+                    f'"{self.piper_exe}" '
+                    f'--model "{self.model}" '
+                    f'--output_file "{final_file}"'
+                )
+
                 subprocess.check_call(cmd, shell=True)
+
             if os.path.exists(final_file):
                 pygame.mixer.music.load(final_file)
                 pygame.mixer.music.set_volume(self.volume)
                 pygame.mixer.music.play()
-        except Exception as e: 
+
+        except Exception as e:
             logging.error(f"Voice Error: {e}")
 
 class AdvancedLogger:
@@ -197,47 +228,77 @@ class AdvancedLogger:
 class FlashOverlay(QWidget):
     def __init__(self, color, message):
         global active_overlay
+
         if active_overlay:
             try:
                 active_overlay.hide()
                 active_overlay.destroy()
-            except: pass
+            except:
+                pass
+
         super().__init__()
         active_overlay = self
-        
-        # Window Setup
-        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.Tool)
+
+        self.message = message
+        self.is_critical = "CRITICAL BATTERY" in message or "not charging" in message.lower()
+
+        self.setWindowFlags(
+            Qt.WindowType.FramelessWindowHint |
+            Qt.WindowType.WindowStaysOnTopHint |
+            Qt.WindowType.Tool
+        )
+
         self.setWindowState(Qt.WindowState.WindowFullScreen)
-        self.setWindowOpacity(0.0)  # Start fully transparent
+        self.setWindowOpacity(0.0)
         self.setStyleSheet(f"background-color: {color};")
-        
+
         layout = QVBoxLayout()
+
         self.label = QLabel(message)
-        self.label.setStyleSheet("color: white; font-size: 45pt; font-weight: bold; padding: 40px;")
+        self.label.setStyleSheet(
+            "color: white; font-size: 50pt; font-weight: bold; padding: 40px;"
+        )
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label.setWordWrap(True)
+
         layout.addWidget(self.label)
         self.setLayout(layout)
 
-        # Fade In Animation
-        self.fade_in = QPropertyAnimation(self, b"windowOpacity")
-        self.fade_in.setDuration(500) # 0.5 seconds
-        self.fade_in.setStartValue(0.0)
-        self.fade_in.setEndValue(0.8)
-        self.fade_in.setEasingCurve(QEasingCurve.Type.OutCubic)
-        
-        # Fade Out Animation
-        self.fade_out = QPropertyAnimation(self, b"windowOpacity")
-        self.fade_out.setDuration(800) # 0.8 seconds
-        self.fade_out.setStartValue(0.8)
-        self.fade_out.setEndValue(0.0)
-        self.fade_out.setEasingCurve(QEasingCurve.Type.InCubic)
-        self.fade_out.finished.connect(self.safe_close)
+        # NORMAL ALERT
+        if not self.is_critical:
+            self.fade_in = QPropertyAnimation(self, b"windowOpacity")
+            self.fade_in.setDuration(500)
+            self.fade_in.setStartValue(0.0)
+            self.fade_in.setEndValue(0.8)
 
-        # Sequence Control
-        self.fade_in.start()
-        # Wait 4 seconds then trigger fade out
-        QTimer.singleShot(4000, self.fade_out.start)
+            self.fade_out = QPropertyAnimation(self, b"windowOpacity")
+            self.fade_out.setDuration(800)
+            self.fade_out.setStartValue(0.8)
+            self.fade_out.setEndValue(0.0)
+            self.fade_out.finished.connect(self.safe_close)
+
+            self.fade_in.start()
+            QTimer.singleShot(4000, self.fade_out.start)
+
+        # CRITICAL ALERT
+        else:
+            self.flash_count = 0
+            self.flash_timer = QTimer()
+            self.flash_timer.timeout.connect(self.flash_screen)
+            self.flash_timer.start(400)   # rapid flashing
+
+    def flash_screen(self):
+        if self.flash_count >= 10:
+            self.flash_timer.stop()
+            self.safe_close()
+            return
+
+        if self.windowOpacity() == 0:
+            self.setWindowOpacity(1.0)
+        else:
+            self.setWindowOpacity(0.0)
+
+        self.flash_count += 1
 
     def safe_close(self):
         self.close()
@@ -245,83 +306,334 @@ class FlashOverlay(QWidget):
 
 class MonitorThread(QThread):
     alert_signal = pyqtSignal(str, str, str)
+
     def __init__(self, settings):
         super().__init__()
+
         self.settings = settings
         self.last_ssid = ""
+        self.last_low_alert_time = 0
+        
+        self.alerted_80 = False
+        self.alerted_90 = False
+        self.alerted_100 = False
+        
+        self.last_charge_percent = None
+        self.last_charge_check_time = time.time()
+        self.stuck_charge_alerted = False
+
+        self.internet_down_alerted = False
+
         try:
             self.wifi = pywifi.PyWiFi()
             self.iface = self.wifi.interfaces()[0]
         except:
             self.iface = None
 
+    def should_alert(self, event_key, cooldown=30):
+        current_time = time.time()
+
+        if not hasattr(self, "last_alert_times"):
+            self.last_alert_times = {}
+
+        last_time = self.last_alert_times.get(event_key, 0)
+
+        if current_time - last_time >= cooldown:
+            self.last_alert_times[event_key] = current_time
+            return True
+
+        return False      
+
     def get_ssid(self):
-        if not self.iface: return "No Adapter"
+        if not self.iface:
+            return "No Adapter"
+
         try:
             if self.iface.status() == const.IFACE_CONNECTED:
                 profiles = self.iface.network_profiles()
-                if profiles: return profiles[0].ssid
+                if profiles:
+                    return profiles[0].ssid
             return "Disconnected"
-        except: return "Unknown Network"
+        except:
+            return "Unknown Network"
 
     def is_connected(self):
         try:
             import urllib.request
-            urllib.request.urlopen('http://www.google.com', timeout=3)
+            urllib.request.urlopen("http://www.google.com", timeout=3)
             return True
-        except: pass
+        except:
+            pass
+
         try:
             socket.gethostbyname("google.com")
             return True
-        except: pass
+        except:
+            pass
+
         for target in [("8.8.8.8", 53), ("1.1.1.1", 53)]:
             try:
                 socket.create_connection(target, timeout=3)
                 return True
-            except: continue
+            except:
+                continue
+
         try:
-            res = subprocess.run("ping -n 1 -w 1000 8.8.8.8", shell=True, capture_output=True)
-            if res.returncode == 0: return True
-        except: pass
+            res = subprocess.run(
+                "ping -n 1 -w 1000 8.8.8.8",
+                shell=True,
+                capture_output=True
+            )
+            if res.returncode == 0:
+                return True
+        except:
+            pass
+
         return False
 
     def run(self):
         logging.info("Monitor Thread Active.")
+
         battery = psutil.sensors_battery()
+        
+        # --- NEW: STARTUP PROTECTION ---
+        # If the app starts and the battery is already high, mark milestones as 'done'
+        if battery and battery.power_plugged:
+            curr_percent = battery.percent
+            if curr_percent >= 80:
+                self.alerted_80 = True
+            if curr_percent >= 90:
+                self.alerted_90 = True
+            if curr_percent >= 100:
+                self.alerted_100 = True
+        # -------------------------------
+
         lp = battery.power_plugged if battery else None
         ln = self.is_connected()
         self.last_ssid = self.get_ssid() if ln else "None"
+        
         p_time = n_time = time.time()
+
         while True:
             battery = psutil.sensors_battery()
-            p, percent = (battery.power_plugged, battery.percent) if battery else (None, 0)
+
+            if battery:
+                p = battery.power_plugged
+                percent = battery.percent
+            else:
+                p = None
+                percent = 0
+
             s = self.get_ssid()
             n = self.is_connected()
+            current_time = time.time()
+
+            # ---------------------------------------------
+              # WIFI CONNECTED BUT NO INTERNET
+            # ---------------------------------------------
+
+            if s not in ["Disconnected", "No Adapter", "Unknown Network"] and not n:
+
+                if not self.internet_down_alerted:
+                    logging.warning(f"CONNECTED TO {s} BUT NO INTERNET")
+
+                    self.alert_signal.emit(
+                        "N",
+                        f"Connected to {s}, but internet is unavailable.",
+                        "yellow"
+                    )
+
+                    self.internet_down_alerted = True
+
+            elif n:
+                self.internet_down_alerted = False
+            # -----------------------------
+            # DYNAMIC BATTERY REMINDER
+            # -----------------------------
+            if self.settings["reminders_on"] and not p:
+
+                if percent >= 80:
+                    interval = 1800   # 30 mins
+                elif percent >= 50:
+                    interval = 600    # 10 mins
+                elif percent >= 20:
+                    interval = 300    # 5 mins
+                else:
+                    interval = 120    # 2 mins
+
+                if current_time - self.last_low_alert_time >= interval:
+                    logging.info(f"BATTERY REMINDER: {percent}%")
+
+                    # aggressive alert below 20%
+                    if percent < 20:
+                        self.alert_signal.emit(
+                            "P",
+                            f"CRITICAL BATTERY {percent}%! Plug in charger immediately!",
+                            "darkred"
+                        )
+                    else:
+                        self.alert_signal.emit(
+                            "P",
+                            f"Battery is at {percent}%",
+                            "red"
+                        )
+
+                    self.last_low_alert_time = current_time
+
+            # -----------------------------
+            # CHARGING MILESTONE ALERTS
+            # -----------------------------
+            if self.settings["reminders_on"] and p:
+
+                if percent >= 100 and not self.alerted_100:
+                    self.alert_signal.emit(
+                        "P",
+                        "Battery reached 100%. Please unplug charger.",
+                        "green"
+                    )
+                    self.alerted_100 = True
+
+                elif percent >= 90 and not self.alerted_90:
+                    self.alert_signal.emit(
+                        "P",
+                        "Battery reached 90%. Consider unplugging charger.",
+                        "green"
+                    )
+                    self.alerted_90 = True
+
+                elif percent >= 80 and not self.alerted_80:
+                    self.alert_signal.emit(
+                        "P",
+                        "Battery reached 80%. Charging milestone reached.",
+                        "green"
+                    )
+                    self.alerted_80 = True
+
+            # -----------------------------
+            # CHARGER CONNECTED BUT NOT CHARGING
+            # -----------------------------
+            if p:
+
+                if self.last_charge_percent is None:
+                    self.last_charge_percent = percent
+                    self.last_charge_check_time = current_time
+
+                elif percent > self.last_charge_percent:
+                    self.last_charge_percent = percent
+                    self.last_charge_check_time = current_time
+                    self.stuck_charge_alerted = False
+
+                elif (
+                    percent == self.last_charge_percent
+                    and percent < 95
+                    and current_time - self.last_charge_check_time >= 300
+                    and not self.stuck_charge_alerted
+                ):
+                    logging.warning(
+                        f"CHARGER CONNECTED BUT NOT CHARGING ({percent}%)"
+                    )
+
+                    self.alert_signal.emit(
+                        "P",
+                        f"Charger connected but battery is not charging ({percent}%). Check charger.",
+                        "darkred"
+                    )
+
+                    self.stuck_charge_alerted = True
+
+            # -----------------------------
+            # NETWORK CHANGE
+            # -----------------------------
             if n != ln:
-                if not n: time.sleep(4); n = self.is_connected()
-                if n != ln:
-                    dur = str(datetime.timedelta(seconds=int(time.time() - n_time)))
-                    stat = "RESTORED" if n else "LOST"
-                    logging.info(f"NETWORK {stat} (SSID: {s})")
-                    msg = f"NETWORK {stat}" + (f" on {s} - Downtime: {dur}" if n else "")
-                    self.alert_signal.emit("N", msg, "blue" if n else "yellow")
-                    ln, n_time = n, time.time()
-                    self.last_ssid = s
-            elif n and s != self.last_ssid and s != "Unknown Network":
+
+                # Skip duplicate alert if WiFi is connected but internet is dead
+                if (
+                    not n
+                    and s not in ["Disconnected", "No Adapter", "Unknown Network"]
+                ):
+                    ln = n
+                    n_time = time.time()
+
+                else:
+                    if not n:
+                        time.sleep(4)
+                        n = self.is_connected()
+
+                    if n != ln:
+                        dur = str(
+                            datetime.timedelta(
+                                seconds=int(time.time() - n_time)
+                            )
+                        )
+
+                        stat = "RESTORED" if n else "LOST"
+
+                        msg = f"NETWORK {stat}"
+                        if n:
+                            msg += f" on {s} - Downtime: {dur}"
+
+                        logging.info(msg)
+
+                        self.alert_signal.emit(
+                            "N",
+                            msg,
+                            "blue" if n else "yellow"
+                        )
+
+                        ln = n
+                        n_time = time.time()
+                        self.last_ssid = s
+
+            elif n and s != self.last_ssid and s not in ["Unknown Network", "Disconnected", "No Adapter"]:
                 logging.info(f"NETWORK SWITCHED: {s}")
-                self.alert_signal.emit("N", f"NETWORK SWITCHED to {s}", "blue")
+
+                self.alert_signal.emit(
+                    "N",
+                    f"NETWORK SWITCHED to {s}",
+                    "blue"
+                )
+
                 self.last_ssid = s
+
+            # -----------------------------
+            # POWER CHANGE
+            # -----------------------------
             if p is not None and p != lp:
-                dur = str(datetime.timedelta(seconds=int(time.time() - p_time)))
-                logging.info(f"POWER EVENT: {'Connected' if p else 'Battery'}")
+                dur = str(
+                    datetime.timedelta(
+                        seconds=int(time.time() - p_time)
+                    )
+                )
+
                 if p:
-                    msg = f"POWER RESTORED. Battery is at {percent}%." + f" Downtime: {dur}"
+                    msg = f"POWER RESTORED. Battery is at {percent}%. Downtime: {dur}"
                     color = "green"
+
                 else:
                     msg = f"POWER LOST. Running on battery at {percent}%."
                     color = "red"
-                self.alert_signal.emit("P", msg, color)
-                lp, p_time = p, time.time()
+
+                    # reset charging milestones
+                    self.alerted_80 = False
+                    self.alerted_90 = False
+                    self.alerted_100 = False
+
+                    # reset charging fault tracking
+                    self.last_charge_percent = None
+                    self.last_charge_check_time = time.time()
+                    self.stuck_charge_alerted = False
+
+                logging.info(msg)
+
+                self.alert_signal.emit(
+                    "P",
+                    msg,
+                    color
+                )
+
+                lp = p
+                p_time = time.time()
+
             self.msleep(2000)
 
 def set_startup(enabled):
@@ -414,18 +726,58 @@ def main():
 
     def startup_report():
         logging.info("--- AURA MONITOR INITIALIZING ---")
-        time.sleep(5) 
-        welcome = "Aura's active. I'm watching your system now."
+        time.sleep(5)
+
+        bat = psutil.sensors_battery()
         is_online = monitor.is_connected()
-        asyncio.run_coroutine_threadsafe(voice.speak(welcome, is_online, settings["silent_mode"]), loop)
-        time.sleep(7) 
+
+        # skip startup voice if battery is critical
+        if bat and not bat.power_plugged and bat.percent < 20:
+            logging.warning(
+                f"Skipping startup voice due to critical battery ({bat.percent}%)"
+            )
+            return
+
+        welcome = "Aura's active. I'm watching your system now."
+
+        asyncio.run_coroutine_threadsafe(
+            voice.speak(
+                welcome,
+                is_online,
+                settings["silent_mode"]
+            ),
+            loop
+        )
+
+        time.sleep(7)
+
         if settings["check_on_start"]:
-            bat = psutil.sensors_battery()
             ssid = monitor.get_ssid()
-            p_stat = 'AC Connected' if bat.power_plugged else f'Battery ({bat.percent}%)'
-            n_stat = f'Online ({ssid})' if is_online else 'OFFLINE'
-            report_msg = f"System check. The system is {p_stat}. {n_stat}."
-            asyncio.run_coroutine_threadsafe(voice.speak(report_msg, is_online, settings["silent_mode"]), loop)
+
+            p_stat = (
+                "AC Connected"
+                if bat.power_plugged
+                else f"Battery ({bat.percent}%)"
+            )
+
+            n_stat = (
+                f"Online ({ssid})"
+                if is_online
+                else "OFFLINE"
+            )
+
+            report_msg = (
+                f"System check. The system is {p_stat}. {n_stat}."
+            )
+
+            asyncio.run_coroutine_threadsafe(
+                voice.speak(
+                    report_msg,
+                    is_online,
+                    settings["silent_mode"]
+                ),
+                loop
+            )
 
     threading.Thread(target=startup_report, daemon=True).start()
     
