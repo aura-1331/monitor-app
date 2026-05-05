@@ -45,7 +45,7 @@ def get_resource_path(relative_path):
 # Fetches directly from the encrypted Windows Credential Manager
 TELEGRAM_TOKEN = keyring.get_password("AuraMonitor", "TELEGRAM_TOKEN")
 CHAT_ID = keyring.get_password("AuraMonitor", "CHAT_ID")
-APP_VERSION = "1.3.0"
+APP_VERSION = "1.4.0"
 
 active_overlay = None
 
